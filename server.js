@@ -1,31 +1,26 @@
 const http = require('http');
-
+const fs = require('fs');
 const server = http.createServer((req, res) => {
 
   console.log(req.url, req.method, req.headers);
-
+  const url = req.url;
+  const method = req.method;
   res.setHeader('Content-Type', 'text/html');
-  if (req.url === '/home') {
+  if (url === '/') {
     res.write('<html>');
     res.write('<head><title>Home Page</title></head>');
-    res.write('<body><h1>Welcome home</h1></body>');
-  } else if (req.url === '/about') {
-    res.write('<html>');
-    res.write('<head><title>About Us</title></head>');
-    res.write('<body><h1>Welcome to About Us page</h1></body>');
-  } else if (req.url === '/node') {
-    res.write('<html>');
-    res.write('<head><title>Node JS Project</title></head>');
-    res.write('<body><h1>Welcome to my Node Js project</h1></body>');
-  } else {
-    res.write('<html>');
-    res.write('<head><title>404 Not Found</title></head>');
-    res.write('<body><h1>404 Not Found</h1></body>');
+    res.write('<body><form action="/message" method = "POST"><input type = "text" name = "message"><button type = "submit">send</button></form></body>');
+    res.write('</html>');
+    return res.end();
+  } 
+
+  if(req.url === '/message' && method ==='POST'){
+    fs.writeFileSync('message.text', 'Dummy message');
+    res.statusCode = 302;
+    res.setHeader('location','/');
+    return res.end();
   }
 
-  // Complete the HTML response
-  res.write('</html>');
-  res.end()
 });
 
 
