@@ -1,47 +1,9 @@
 const http = require('http');
-const fs = require('fs');
-const server = http.createServer((req, res) => {
 
-  console.log(req.url, req.method, req.headers);
-  const url = req.url;
-  const method = req.method;
-  res.setHeader('Content-Type', 'text/html');
-  if (url === '/') {
-    res.write('<html>');
-    res.write('<head><title>Home Page</title></head>');
-    res.write('<body>');
-    res.write('<form action="/message" method="POST"><input type="text" name="message"><button type="submit">Send</button></form>');
+const routes = require('./route');
 
-    // Read the content of 'message.txt' and display it if it exists
-    fs.readFile('message.txt', 'utf8', (err,content) => {
-
-      res.write('<p>' + content + '</p>');
-      res.write('</body>');
-      res.write('</html>');
-      res.end();
-    });
-  }
-
-  if (req.url === '/message' && method === 'POST') {
-    // fs.writeFileSync('message.text', 'Dummy message');
-    const body = [];
-    req.on('data', (chunk) => {
-      console.log(chunk);
-      body.push(chunk);
-    });
-    return req.on('end', () => {
-      const parsedBody = Buffer.concat(body).toString();
-      console.log(parsedBody);
-      const message = parsedBody.split('=')[1];//splitting  becoz the parsed body will be in key value pairs key = value
-      fs.writeFile('message.txt', message, (err) => {
-        res.statusCode = 302,
-          res.setHeader('location', '/'),
-          res.end()
-      });
-    });
-  }
-
-});
+console.log(routes.someText)
+const server = http.createServer(routes.handler);
 
 
 server.listen(4000);
