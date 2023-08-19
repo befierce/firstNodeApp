@@ -1,7 +1,7 @@
 const http = require('http');//importing the HTTP
 const express = require('express');//importing the expess
 const bodyParser = require('body-parser');//importing the body parser
-
+const path = require('path');
 const adminRoutes = require('./routes/admin');//exporting the file we used to keep routing code seperately
 const shopRoutes = require('./routes/shop');
 
@@ -14,7 +14,7 @@ app.use('/admin',adminRoutes)
 app.use(shopRoutes)
 
 app.use((req,res,next)=>{
-    res.status(404).send('<h1>Page Not Found<h1>');
+    res.status(404).sendFile(path.join(__dirname,'views','PageNotFound.html'));
 })
 
 
