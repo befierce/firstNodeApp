@@ -10,8 +10,15 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/admin',adminRoutes)
-app.use(shopRoutes)
+//giving direct read file acess if request comes of file acess
+//it will be redirected to this path below
+app.use(express.static(path.join(__dirname,'public')));
+
+
+app.use('/admin',adminRoutes);
+app.use(shopRoutes);
+
+
 
 app.use((req,res,next)=>{
     res.status(404).sendFile(path.join(__dirname,'views','PageNotFound.html'));
